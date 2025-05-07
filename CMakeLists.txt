@@ -24,6 +24,8 @@ add_library(Lute.Time STATIC)
 # luau setup
 set(LUAU_BUILD_CLI OFF)
 set(LUAU_BUILD_TESTS OFF)
+set(LUAU_EXTERN_C ON)
+set(LUAU_STATIC_CRT ON)
 
 add_subdirectory(extern/luau)
 

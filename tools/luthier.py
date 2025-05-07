@@ -41,7 +41,7 @@ argParser = argparse.ArgumentParser(description='crafting a lute!', formatter_cl
 argParser.add_argument(
     'subcommand', help='command to execute',
     metavar="CMD",
-    choices=['configure', 'tune', 'build', 'craft', 'run', 'play', 'fetch'],
+    choices=['configure', 'tune', 'build', 'craft', 'run', 'play', 'fetch', "generate"],
 )
 
 argParser.add_argument(
@@ -429,6 +429,8 @@ def main(argv):
     elif subcommand == "configure" or subcommand == "tune":
         generateStdLibFilesIfNeeded()
         return configure(args)
+    elif subcommand == "generate":
+        generateStdLibFilesIfNeeded()
     elif subcommand == "build" or subcommand == "craft":
         generateStdLibFilesIfNeeded()
         # auto configure if it's not already happened
