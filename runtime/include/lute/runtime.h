@@ -63,6 +63,7 @@ struct Runtime
     std::mutex continuationMutex;
     std::vector<std::function<void()>> continuations;
 
+    // PATCH: Remove private keyword here to allow mlua-lute-integration access
     // TODO: can this be handled by libuv?
     std::atomic<bool> stop;
     std::condition_variable runLoopCv;
