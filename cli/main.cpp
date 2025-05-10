@@ -83,7 +83,7 @@ static void luteopen_libs(lua_State* L)
     }
 }
 
-lua_State* setupState(Runtime& runtime)
+lua_State* setupState(Runtime& runtime, lua_State* parent) // PATCH: Pass the parent (or nullptr if no parent to setupState)
 {
     // Separate VM for data copies
     runtime.dataCopy.reset(luaL_newstate());
@@ -270,7 +270,7 @@ int handleRunCommand(int argc, char** argv, int argOffset)
     }
 
     Runtime runtime;
-    lua_State* L = setupState(runtime);
+    lua_State* L = setupState(runtime, nullptr);
 
     bool success = runFile(runtime, filePath, L);
     return success ? 0 : 1;

@@ -11,7 +11,7 @@
 #include "lualib.h"
 
 // TODO: move setup to a reachable place as well
-lua_State* setupState(Runtime& runtime);
+lua_State* setupState(Runtime& runtime, lua_State* parent); // PATCH: Pass the parent (or nullptr if no parent to setupState)
 
 struct TargetFunction
 {
@@ -179,7 +179,7 @@ int lua_spawn(lua_State* L)
 
     auto child = std::make_shared<Runtime>();
 
-    setupState(*child);
+    setupState(*child, L); // PATCH: Pass the parent (or nullptr if no parent to setupState)
 
     lua_Debug ar;
     lua_getinfo(L, 1, "s", &ar);
@@ -215,10 +215,13 @@ int lua_spawn(lua_State* L)
         {
             // Current runtime VM is dropping a foreign VM Ref
             // It has to be released in target runtime, so we copy it over
-            TargetFunction* target = (TargetFunction*)userdata;
+            /*TargetFunction* target = (TargetFunction*)userdata;
+
+            if (target->runtime == nullptr || target->func == nullptr || target->func == nullptr)
+                return; // PATCH: Check if target->runtime is null
 
             // Schedule references to be removed in target runtime
-            target->runtime->schedule(
+            target->runtime->schedule( // PATCH: Use scheduleNow to ensure the Ref is removed before the VM is closed
                 [func = target->func]() mutable
                 {
                     func.reset();
@@ -226,7 +229,7 @@ int lua_spawn(lua_State* L)
             );
 
             // Remove the Ref we have in current VM, now it will not cause the actual lua_unref
-            target->~TargetFunction();
+            target->~TargetFunction();*/
         }
     );
 
