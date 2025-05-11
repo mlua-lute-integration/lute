@@ -11,7 +11,7 @@
 #include "lualib.h"
 
 // TODO: move setup to a reachable place as well
-lua_State* setupState(Runtime& runtime, lua_State* parent); // PATCH: Pass the parent (or nullptr if no parent to setupState)
+lua_State* setupState(Runtime& runtime);
 
 struct TargetFunction
 {
@@ -179,7 +179,7 @@ int lua_spawn(lua_State* L)
 
     auto child = std::make_shared<Runtime>();
 
-    setupState(*child, L); // PATCH: Pass the parent (or nullptr if no parent to setupState)
+    setupState(*child);
 
     lua_Debug ar;
     lua_getinfo(L, 1, "s", &ar);
