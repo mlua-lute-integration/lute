@@ -167,11 +167,6 @@ void Runtime::schedule(std::function<void()> f)
     runLoopCv.notify_one();
 }
 
-void Runtime::scheduleNow(std::function<void()> f)
-{
-    f();
-}
-
 void Runtime::scheduleLuauError(std::shared_ptr<Ref> ref, std::string error)
 {
     std::unique_lock lock(continuationMutex);

@@ -36,7 +36,6 @@ struct Runtime
     bool hasThreads();
 
     void schedule(std::function<void()> f);
-    void scheduleNow(std::function<void()> f);
 
     // Resume thread with the specified error
     void scheduleLuauError(std::shared_ptr<Ref> ref, std::string error);

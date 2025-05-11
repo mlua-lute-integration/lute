@@ -213,19 +213,9 @@ int lua_spawn(lua_State* L)
         kTargetFunctionTag,
         [](lua_State* L, void* userdata)
         {
-            printf("Freeing TargetFunction %p\n", userdata);
-            TargetFunction* target = (TargetFunction*)userdata;
-            printf("Function on userdata: %p\n", target->func.get());
-
-            printf("Trying to lock target runtime...\n");
-
-            {
-                std::unique_lock lock(target->runtime->dataCopyMutex);
-            }
-
-
             // Current runtime VM is dropping a foreign VM Ref
             // It has to be released in target runtime, so we copy it over
+            TargetFunction* target = (TargetFunction*)userdata;
 
             // Schedule references to be removed in target runtime
             target->runtime->schedule(
