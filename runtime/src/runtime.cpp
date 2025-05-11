@@ -9,7 +9,6 @@
 
 static void lua_close_checked(lua_State* L)
 {
-    printf("Closing lua state %p\n", L);
     if (L)
         lua_close(L);
 }
@@ -126,7 +125,6 @@ void Runtime::runContinuously()
             {
                 // Block to wait on event
                 {
-                    printf("Waiting for continuations\n");
                     std::unique_lock lock(continuationMutex);
 
                     runLoopCv.wait(
@@ -139,7 +137,6 @@ void Runtime::runContinuously()
                 }
 
                 runToCompletion();
-                printf("Stop is set to %d\n", stop.load());
             }
 
             printf("Stopping run loop [lute]\n");
