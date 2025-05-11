@@ -13,7 +13,6 @@ Ref::Ref(lua_State* L, int idx)
 
 Ref::~Ref()
 {
-    printf("Destroying ref\n");
     lua_unref(GL, refId);
 }
 
