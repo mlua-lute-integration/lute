@@ -213,15 +213,22 @@ int lua_spawn(lua_State* L)
         kTargetFunctionTag,
         [](lua_State* L, void* userdata)
         {
+            printf("Freeing TargetFunction %p\n", userdata);
+            TargetFunction* target = (TargetFunction*)userdata;
+            printf("Function on userdata: %p\n", target->func.get());
+
+            printf("Trying to lock target runtime...\n");
+
+            {
+                std::unique_lock lock(target->runtime->dataCopyMutex);
+            }
+
+
             // Current runtime VM is dropping a foreign VM Ref
             // It has to be released in target runtime, so we copy it over
-            /*TargetFunction* target = (TargetFunction*)userdata;
-
-            if (target->runtime == nullptr || target->func == nullptr || target->func == nullptr)
-                return; // PATCH: Check if target->runtime is null
 
             // Schedule references to be removed in target runtime
-            target->runtime->schedule( // PATCH: Use scheduleNow to ensure the Ref is removed before the VM is closed
+            target->runtime->schedule(
                 [func = target->func]() mutable
                 {
                     func.reset();
@@ -229,7 +236,7 @@ int lua_spawn(lua_State* L)
             );
 
             // Remove the Ref we have in current VM, now it will not cause the actual lua_unref
-            target->~TargetFunction();*/
+            target->~TargetFunction();
         }
     );
 
